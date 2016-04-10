@@ -14,6 +14,7 @@ import javax.swing.text.DocumentFilter;
 import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowAdapter;
 
 import javax.swing.JComboBox;
 import javax.swing.JTable;
@@ -25,9 +26,11 @@ import javax.swing.JTextField;
 
 import utility.UppercaseDocumentFilter;
 
-public class AddAppointment_GUI extends JFrame {
+public class AddAppointment_GUI{
 
+	private JFrame jFrame;
 	private JPanel contentPane;
+
 	private JComboBox serviceComboBox;
 	private JLabel techLbl;
 	private JLabel dateLbl;
@@ -41,15 +44,20 @@ public class AddAppointment_GUI extends JFrame {
 	private JLabel lblReg;
 	private DocumentFilter filter = new UppercaseDocumentFilter();
 
-	
+
+
+
 	public AddAppointment_GUI() {
-		setTitle("Create Appointment");
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 507, 491);
+		jFrame = new JFrame();
+		jFrame.setTitle("Create Appointment");
+		jFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		jFrame.setBounds(100, 100, 507, 491);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
+		jFrame.setContentPane(contentPane);
 		contentPane.setLayout(null);
+
+
 		
 		JPanel customerPanel = new JPanel();
 		customerPanel.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Search For Vehicle By Registration", TitledBorder.CENTER, TitledBorder.TOP, null, new Color(255, 0, 0)));
@@ -211,6 +219,15 @@ public class AddAppointment_GUI extends JFrame {
 	public void setLblReg(JLabel lblReg) {
 		this.lblReg = lblReg;
 	}
+
+
+	public JFrame getjFrame() {
+		return jFrame;
+	}
+
+	public void setjFrame(JFrame jFrame) {
+		this.jFrame = jFrame;
+	}
 	
 	
 
@@ -246,4 +263,16 @@ public class AddAppointment_GUI extends JFrame {
 
 		
 		}
+
+
+
+
+	public void disposeOnClose(WindowAdapter windowAdapter){
+
+
+		jFrame.addWindowListener(windowAdapter);
+	}
+
+
+
 }

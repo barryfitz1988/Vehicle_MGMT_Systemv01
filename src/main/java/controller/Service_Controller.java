@@ -50,6 +50,26 @@ public class Service_Controller {
     
     
     }
+
+
+	public void refreshTable(){
+
+
+		service.clear();
+
+
+		List<Service_Model> c = serviceservice.findAll();
+
+		for (int x = 0; x < c.size(); x++) {
+			servicemodel = c.get(x);
+			service.add(servicemodel);
+
+		}
+
+		servicetable.fireTableDataChanged();
+
+
+	}
     
 	class deleteListener implements ActionListener {
 
@@ -70,7 +90,7 @@ public class Service_Controller {
 					serviceservice.open();
 					serviceservice.delete(id);
 					serviceservice.close();
-
+					refreshTable();
 					servicegui.getInfoServiceIDTextField().setText("");
 					servicegui.getInfoServiceNameTextField().setText("");
 					servicegui.getInfoServicePriceTextField().setText("");
@@ -158,7 +178,7 @@ public class Service_Controller {
 							serviceservice.update(c);
 							serviceservice.close();
 							found = true;
-
+							refreshTable();
 							servicegui.getInfoServiceIDTextField().setText("");
 							servicegui.getInfoServiceNameTextField().setText("");
 							servicegui.getInfoServicePriceTextField().setText("");
@@ -250,7 +270,7 @@ public class Service_Controller {
 
 				serviceservice.persist(servicemodel);
 				serviceservice.close();
-				
+				refreshTable();
 				servicegui.getNameTextfield().setText("");
 				servicegui.getPriceTextField().setText("");
 				servicegui.getTimeTextField().setText("");

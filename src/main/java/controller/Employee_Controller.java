@@ -59,6 +59,25 @@ public class Employee_Controller {
     
     
     }
+
+    public void refreshTable(){
+
+
+        employees.clear();
+
+        List<Employee_Model> c = employeeservice.findAll();
+
+        for (int x = 0; x < c.size(); x++) {
+            employeemodel = c.get(x);
+            employees.add(employeemodel);
+
+        }
+        employeetable.fireTableDataChanged();
+
+
+    }
+
+
 	class rowSelectedListener implements ListSelectionListener {
 
 		@Override
@@ -113,7 +132,7 @@ public class Employee_Controller {
 					employeeservice.open();
 					employeeservice.delete(id);
 					employeeservice.close();
-
+                    refreshTable();
 					employeegui.getInfoIDTextField().setText("");
 					employeegui.getInfoFirstnameTextField().setText("");
 					employeegui.getInfoSurnameTextField().setText("");
@@ -202,7 +221,7 @@ public class Employee_Controller {
 							employeeservice.update(c);
 							employeeservice.close();
 							found = true;
-
+                            refreshTable();
 							employeegui.getInfoIDTextField().setText("");
 							employeegui.getInfoFirstnameTextField().setText("");
 							employeegui.getInfoSurnameTextField().setText("");
@@ -292,7 +311,7 @@ public class Employee_Controller {
 
 				employeeservice.persist(employeemodel);
 				employeeservice.close();
-				
+                    refreshTable();
 		
 				employeegui.getNameTextfield().setText("");
 				employeegui.getSurnameTextField().setText("");

@@ -15,11 +15,7 @@ import gui.PartsTable;
 import gui.VehicleTable;
 
 import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -142,94 +138,115 @@ public class Appointment_Controller {
 		this.currentappointmentgui.InvoiceJob(new InvoiceListener());
 		this.appointmentdescion.UpdateAppointment(new UpdateListener());
 		this.appointmentdescion.DeleteAppointment(new DeleteListener());
+        this.addappointmentgui.disposeOnClose(new DisposeOnClose());
 		
 		this.maingui.addappointmentListener(new Listener());
 	
 
 	}
 
-	
+class DisposeOnClose extends WindowAdapter{
+
+    @Override
+    public void windowClosing(WindowEvent e){
+
+        addappointmentgui.getjFrame().dispose();
+        //appointments.clear();
+        appointment_partsList.clear();
+        currentparts.clear();
+        services.clear();
+        ownersCarList.clear();
+        servicesname = new String[servicesname.length];
+        counter = 0;
+        price = 0;
+
+    }
+}
+
+
 	
 	
 	public void refreshPartsTable() {
 
-
 		appointment_partsList.clear();
+		List<Appointment_Parts_Model> parts = appointmentservice.findAllParts();
 
-
-
-
-            addappointmentgui.getDateLbl().setText(date);
-
-            //to clear table
-            for (int i = 0; i < appointmentgui.getAppointmentTable().getRowCount(); i++) {
-                for (int j = 0; j < appointmentgui.getAppointmentTable().getColumnCount(); j++) {
-                    appointmentgui.getAppointmentTable().setValueAt("", i, j);
-                }
-            }
-
-
-            //to populate table
-            for(Appointment_Model a : appointments){
-
-
-                int serviceDuration = a.getService_length();
-                String employeeName = a.getEmployee_name();
-
-
-                if(date.equals(a.getDate()) /*&& hour.equals(a.getTime())*/){
-
-
-                    for(int x = 0; x<appointmentgui.getAppointmentTable().getColumnCount();x++) {
-
-                        if(appointmentgui.getAppointmentTable().getTableHeader().getColumnModel().getColumn(x).getHeaderValue()
-                                .equals(employeeName)){
-
-                            for(int y = 0; y<appointmentgui.getRowtable().getRowCount(); y++) {
-
-                                if(appointmentgui.getRowtable().getValueAt(y,y).equals(a.getTime())){
-
-                                    appointmentgui.getAppointmentTable().setValueAt(a.getCustomer_name(), y, x);
-
-
-                                    if(serviceDuration > 1){
-
-                                        for(int s =0; s < serviceDuration; s++){
-                                            appointmentgui.getAppointmentTable().setValueAt(a.getCustomer_name(), y + s, x);
-                                        }
-                                    }
-                                }
-
-                            }
-                        }
-                    }
-
-                }
-
-            }
-
-
-	}
-	
-	public void refreshTable() {
-
-		appointments.clear();
-		List<Appointment_Model> a = appointmentservice.findAll();
-
-		for (int x = 0; x < a.size(); x++) {
-			appointmentmodel = a.get(x);
-			appointments.add(appointmentmodel);
+		for (int x = 0; x < parts.size(); x++) {
+			appointment_parts = parts.get(x);
+			appointment_partsList.add(appointment_parts);
 
 		}
+	}
+	
+
+
+    public void refreshTable() {
+
+        appointments.clear();
+
+
+        List<Appointment_Model> app = appointmentservice.findAll();
+
+        for (int x = 0; x < app.size(); x++) {
+            appointmentmodel = app.get(x);
+            appointments.add(appointmentmodel);
+
+        }
+        //to clear table
+        for (int i = 0; i < appointmentgui.getAppointmentTable().getRowCount(); i++) {
+            for (int j = 0; j < appointmentgui.getAppointmentTable().getColumnCount(); j++) {
+                appointmentgui.getAppointmentTable().setValueAt("", i, j);
+            }
+        }
+
+
+        //to populate table
+        for(Appointment_Model a : appointments){
+
+
+            int serviceDuration = a.getService_length();
+            String employeeName = a.getEmployee_name();
+
+
+            if(date.equals(a.getDate()) /*&& hour.equals(a.getTime())*/){
+
+
+                for(int x = 0; x<appointmentgui.getAppointmentTable().getColumnCount();x++) {
+
+                    if(appointmentgui.getAppointmentTable().getTableHeader().getColumnModel().getColumn(x).getHeaderValue()
+                            .equals(employeeName)){
+
+                        for(int y = 0; y<appointmentgui.getRowtable().getRowCount(); y++) {
+
+                            if(appointmentgui.getRowtable().getValueAt(y,y).equals(a.getTime())){
+
+                                appointmentgui.getAppointmentTable().setValueAt(a.getCustomer_name(), y, x);
+
+
+                                if(serviceDuration > 1){
+
+                                    for(int s =0; s < serviceDuration; s++){
+                                        appointmentgui.getAppointmentTable().setValueAt(a.getCustomer_name(), y + s, x);
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+                }
+
+            }
+
+        }
 
         appointmenttablemodel.fireTableDataChanged();
 
-		
-		
-		
-		
-		
-	}
+
+
+    }
+
+
+
 	
 	
 	class InvoiceListener implements ActionListener {
@@ -313,6 +330,8 @@ public class Appointment_Controller {
 				currentappointmentgui.setVisible(false);
 				appointmentgui.getAppointmentTable().setVisible(false);
 				appointmentgui.setVisible(false);
+                servicesname = new String[servicesname.length];
+                counter = 0;
 				employees.clear();
 				refreshTable();
 				
@@ -324,6 +343,8 @@ public class Appointment_Controller {
 				appointmentgui.setVisible(false);
 				maingui.setVisible(true);
 				employees.clear();
+                servicesname = new String[servicesname.length];
+                counter = 0;
 				refreshTable();
 				
 			}
@@ -589,7 +610,7 @@ public class Appointment_Controller {
 	}			
 						
 						System.out.println("DATE--->" + date);
-						addappointmentgui.dispose();
+						addappointmentgui.getjFrame().dispose();
 						services.clear();
 						ownersCarList.clear();
 						servicesname = new String[servicesname.length];
@@ -678,8 +699,8 @@ public class Appointment_Controller {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			// TODO Auto-generated method stub
-			addappointmentgui.dispose();
-			appointments.clear();
+			addappointmentgui.getjFrame().dispose();
+			//appointments.clear();
 			appointment_partsList.clear();
 			currentparts.clear();
 			services.clear();
@@ -823,7 +844,7 @@ public class Appointment_Controller {
 	    	 addappointmentgui.getTechLbl().setText(employeeName);
 	    	 addappointmentgui.getTimeLbl().setText(time);
 	    	 addappointmentgui.getServiceComboBox().setModel(new DefaultComboBoxModel(servicesname));
-	    	 addappointmentgui.setVisible(true);
+	    	 addappointmentgui.getjFrame().setVisible(true);
 	     
 	     }else{
 				

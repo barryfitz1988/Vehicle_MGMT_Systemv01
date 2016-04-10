@@ -65,9 +65,25 @@ public class Vehicle_Controller {
     			this.blanktable.tableSelecterListener(new customerSelectedListener());
     			this.editblanktable.tableSelecterListener(new EditcustomerSelectedListener());
     }
-    
-	public void refreshTable() {
+
+	public void refreshTable(){
+
+
+		owners_carList.clear();
+
+
+		List<Customers_Vehicle_Model> cuscar = vehicleservice.findAllOwners();
+
+		for (int x = 0; x < cuscar.size(); x++) {
+			owners_car = cuscar.get(x);
+			owners_carList.add(owners_car);
+
+		}
+
+
 		vehicletable.fireTableDataChanged();
+
+
 	}
 	
 	
@@ -81,7 +97,7 @@ public class Vehicle_Controller {
 				
 				boolean validReg = FieldValidator.checkRegistration(vehiclegui.getInfoRegTextField());
 				boolean validMake = FieldValidator.checkNameField(vehiclegui.getInfoMakeTextField());
-				boolean validModel = FieldValidator.checkNameField(vehiclegui.getInfoModelTextField());			
+				boolean validModel = FieldValidator.checkParts(vehiclegui.getInfoModelTextField());
 				boolean validChassis = FieldValidator.checkRegistration(vehiclegui.getInfoChassisTextField());
 				boolean validCustomer = FieldValidator.checkCustomerField(vehiclegui.getInfoCustomerTextField());
 				

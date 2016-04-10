@@ -69,8 +69,25 @@ public class Sales_Controller {
 		this.salesgui.SearchforImage(new ImageSearchListener());
 
 	}
-	
-	
+
+	public void refreshTable(){
+
+
+		sales.clear();
+
+
+		List<Sales_Model> c = salesservice.findAll();
+
+		for (int x = 0; x < c.size(); x++) {
+			salesmodel = c.get(x);
+			sales.add(salesmodel);
+
+		}
+
+		salestable.fireTableDataChanged();
+
+
+	}
 	
 	
 	class editListener implements ActionListener {
@@ -154,7 +171,7 @@ public class Sales_Controller {
 							salesservice.update(c);
 							salesservice.close();
 							found = true;
-
+							refreshTable();
 							salesgui.getDetailidtextfield().setText("");
 							salesgui.getDetailregtextfield().setText("");
 							salesgui.getDetailmakeTextField().setText("");
@@ -212,7 +229,7 @@ public class Sales_Controller {
 					salesservice.open();
 					salesservice.delete(id);
 					salesservice.close();
-					//refreshTable();
+					refreshTable();
 					salesgui.getDetailidtextfield().setText("");
 					salesgui.getDetailregtextfield().setText("");
 					salesgui.getDetailmakeTextField().setText("");
@@ -385,7 +402,7 @@ public class Sales_Controller {
 				//customers.add(customers.size(),customermodel);
 				salesservice.persist(salesmodel);
 				salesservice.close();
-				
+				refreshTable();
 
 				salesgui.getRegTextfield().setText("");
 				salesgui.getMaketextField().setText("");
@@ -422,7 +439,7 @@ public class Sales_Controller {
 			    int result;
 			        
 			    chooser = new JFileChooser(); 
-			    chooser.setCurrentDirectory(new java.io.File("C:\\Users\\Barry\\Documents\\College Work 2016\\Final Project Pictures"));
+			    chooser.setCurrentDirectory(new java.io.File("C:\\Users\\User\\Pictures"));
 			    chooser.setDialogTitle(choosertitle);
 			    chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 			    //

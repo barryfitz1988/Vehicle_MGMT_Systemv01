@@ -50,6 +50,25 @@ public class Parts_Controller{
     
     
     }
+
+
+	public void refreshTable(){
+
+
+		parts.clear();
+
+		List<Parts_Model> c = partsservice.findAll();
+
+		for (int x = 0; x < c.size(); x++) {
+			partsmodel = c.get(x);
+			parts.add(partsmodel);
+
+		}
+
+		partstable.fireTableDataChanged();
+
+
+	}
     
 	class deleteListener implements ActionListener {
 
@@ -70,7 +89,7 @@ public class Parts_Controller{
 					partsservice.open();
 					partsservice.delete(id);
 					partsservice.close();
-
+					refreshTable();
 					partsgui.getPartInfoIDTextField().setText("");
 					partsgui.getInfoPartPriceTextField().setText("");
 					partsgui.getInfoPartNameTextField().setText("");
@@ -158,7 +177,7 @@ public class Parts_Controller{
 							partsservice.update(c);
 							partsservice.close();
 							found = true;
-
+							refreshTable();
 							partsgui.getPartInfoIDTextField().setText("");
 							partsgui.getInfoPartPriceTextField().setText("");
 							partsgui.getInfoPartNameTextField().setText("");
@@ -245,7 +264,7 @@ public class Parts_Controller{
 
 				partsservice.persist(partsmodel);
 				partsservice.close();
-				
+					refreshTable();
 				partsgui.getNameTextfield().setText("");
 				partsgui.getPriceTextField().setText("");
 				partsgui.getdescriptionTextField().setText("");
